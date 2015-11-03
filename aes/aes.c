@@ -222,7 +222,7 @@ void transpose44(char *out, const char *in)
 }
 
 void
-aes128_cipher(const void *plain, const void *key, const void *cipher)
+aes128_cipher(const void *plain, const void *key, void *cipher)
 {
   char in[16], out[16];
   transpose44(in, plain);
