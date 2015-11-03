@@ -1,6 +1,4 @@
-#include <string.h>
-
-typedef void(*crypt_fn_t)(const void *plain, const void *key, void *cipher);
+#include "cipher_modes.h"
 
 static void
 block_xor(void *o, const void *a, const void *b, size_t size)
