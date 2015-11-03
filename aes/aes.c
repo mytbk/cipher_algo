@@ -169,7 +169,7 @@ aes128(unsigned char *input, const unsigned char *key, unsigned char *output)
         }
         aes_log(state, "end of round");
     }
-    
+
     /* final round */
     for (i=0; i<16; i++) {
         state[i] = s[state[i]];
@@ -183,7 +183,6 @@ aes128(unsigned char *input, const unsigned char *key, unsigned char *output)
         output[i] = state[i] ^ roundkey[i];
     }
     aes_log(output, "final output");
-    
 }
 
 static inline
@@ -198,6 +197,7 @@ unsigned hextoint(char c)
     else return -1;
 }
 
+/*
 static inline
 void transpose(unsigned char a[][4])
 {
@@ -211,59 +211,22 @@ void transpose(unsigned char a[][4])
         s[i] = t[i];
     }
 }
+*/
 
-int
-main(int argc, char *argv[])
+static inline
+void transpose44(char *out, const char *in)
 {
-    /* usage: aes -k <key> -i <data> -o <out> */
-    int i;
-    unsigned char key[16];
-    
-    char *keyfile, *datafile, *outfile;
-    
-    for (i=1; i<argc; i++) {
-        if (strcmp(argv[i],"-k")==0) {
-            keyfile = argv[i+1];
-            i++;
-        }
-        else if (strcmp(argv[i],"-i")==0) {
-            datafile = argv[i+1];
-            i++;
-        }
-        else if (strcmp(argv[i], "-o")==0) {
-            outfile = argv[i+1];
-            i++;
-        }
-    }
-
-    FILE *fKey, *fin, *fout;
-    fKey = fopen(keyfile, "rb");
-    for (i=0; i<16; i++) {
-        char k[2];
-        fread(k, 2, 1, fKey);
-        key[(i%4)*4+(i/4)] = hextoint(k[0])*16+hextoint(k[1]);
-    }
-    fclose(fKey);
-    fin = fopen(datafile, "rb");
-    fout = fopen(outfile, "wb");
-    while (!feof(fin)) {
-        unsigned char data[16],out[16];
-        if (fread(data, 16, 1, fin)==1) {
-            transpose(data);
-            aes128(data, key, out);
-            transpose(out);
-            fwrite(out, 16, 1, fout);
-        }
-    }
-    fclose(fin);
-    fclose(fout);
-
-    return 0;
+  for (int i=0; i<16; i++) {
+    out[i] = in[(i%4)*4+(i/4)];
+  }
 }
 
-
-
-
-
-
+void
+aes128_cipher(const void *plain, const void *key, const void *cipher)
+{
+  char in[16], out[16];
+  transpose44(in, plain);
+  aes128((unsigned char*)in, key, (unsigned char*)out);
+  transpose44((char*)cipher, out);
+}
 
