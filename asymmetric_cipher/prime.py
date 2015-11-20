@@ -55,14 +55,15 @@ def miller_rabin_test(p):
         return 1
 
 ## test
-print ('Testing expmod')
-print (expmod(3,2171950143037921457539-1,2171950143037921457539)) # should be 1
-print (expmod(19, 333333, 32767))
-print ((19**333333)%32767)
-print (expmod(123423524523452345245423, 4298, 572934875293875284795827495728345947502745))
-print ((123423524523452345245423**4298)%572934875293875284795827495728345947502745)
-print ('Testing Miller-Rabin test')
-print (miller_rabin_test(561)) # not prime
-print (miller_rabin_test(85329136972542481)) # prime
-print (miller_rabin_test(2171950143037921457539)) # prime
-print (miller_rabin_test(398572398798745928751524351)) # not prime
+if __name__ == "__main__":
+	print ('Testing expmod')
+	print (expmod(3,2171950143037921457539-1,2171950143037921457539)) # should be 1
+	print (expmod(19, 333333, 32767))
+	print ((19**333333)%32767)
+	print (expmod(123423524523452345245423, 4298, 572934875293875284795827495728345947502745))
+	print ((123423524523452345245423**4298)%572934875293875284795827495728345947502745)
+	print ('Testing Miller-Rabin test')
+	print (miller_rabin_test(561)) # not prime
+	print (miller_rabin_test(85329136972542481)) # prime
+	print (miller_rabin_test(2171950143037921457539)) # prime
+	print (miller_rabin_test(398572398798745928751524351)) # not prime
