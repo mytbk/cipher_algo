@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from random import randint
+import sys
+sys.setrecursionlimit(5000)
 
 # Miller-Rabin test:
 # for a number n, n-1=t*2^k, and a number a<n
@@ -83,22 +85,51 @@ def nearest_prime_smaller(x):
 
     return x
 
+# Extend Euclid algorithm
+# given the number x and a, calculate b, s.t. ab=1 (mod x)
+# if (a,x)!=1 return 0
+
+
+def extend_euclid(a, x):
+    # x = a*q0+r0 => r0 = x-a*q0 = x*1+a*(-q0)
+    # a = r0*q1+r1 => r1 = a-r0*q1 = x*(-q1)+a*(1+q0*q1)
+    # r0 = r1*q2+r2 => r2 = r0-r1*q2
+    x_orig = x
+    a = a % x
+
+    if a == 1:
+        return 1
+
+    x0, a0 = 1, 0
+    x1, a1 = 0, 1
+    while True:
+        r, q = x % a, x // a
+        x2, a2 = x0 * 1 - q * x1, a0 * 1 - q * a1
+        x0, a0, x1, a1 = x1, a1, x2, a2 % x_orig
+        if r == 1:  # (a,x)=1 and a^(-1)=a1 is found
+            return a1
+        if r == 0:  # (a,x)=a, a!=1
+            return 0
+        # continue the calculation
+        a, x = r, a
+
+
 # test
 if __name__ == "__main__":
-    print ('Testing expmod')
-    print (expmod(3, 2171950143037921457539 - 1, 2171950143037921457539))
-           # should be 1
-    print (expmod(19, 333333, 32767))
-    print ((19 ** 333333) % 32767)
-    print (expmod(123423524523452345245423, 4298,
-           572934875293875284795827495728345947502745))
-    print ((123423524523452345245423 ** 4298) %
-           572934875293875284795827495728345947502745)
-    print ('Testing Miller-Rabin test')
-    print (miller_rabin_test(561))  # not prime
-    print (miller_rabin_test(85329136972542481))  # prime
-    print (miller_rabin_test(2171950143037921457539))  # prime
-    print (miller_rabin_test(398572398798745928751524351))  # not prime
+    print('Testing expmod')
+    print(expmod(3, 2171950143037921457539 - 1, 2171950143037921457539))
+    # should be 1
+    print(expmod(19, 333333, 32767))
+    print((19 ** 333333) % 32767)
+    print(expmod(123423524523452345245423, 4298,
+                 572934875293875284795827495728345947502745))
+    print((123423524523452345245423 ** 4298) %
+          572934875293875284795827495728345947502745)
+    print('Testing Miller-Rabin test')
+    print(miller_rabin_test(561))  # not prime
+    print(miller_rabin_test(85329136972542481))  # prime
+    print(miller_rabin_test(2171950143037921457539))  # prime
+    print(miller_rabin_test(398572398798745928751524351))  # not prime
 
-    print (nearest_prime_bigger(1234567890))
-    print (nearest_prime_smaller(1234567890))
+    print(nearest_prime_bigger(1234567890))
+    print(nearest_prime_smaller(1234567890))

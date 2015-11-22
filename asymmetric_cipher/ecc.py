@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from prime import *
-from rsa import extend_euclid
 
 
 def newEC(a, b, p):
